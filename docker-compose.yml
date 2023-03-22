@@ -1,0 +1,93 @@
+version: '3.7'
+
+x-logging:
+  &default-logging
+  driver: "json-file"
+  options:
+    max-size: "1m"
+    max-file: "1"
+
+services:
+  nginx:
+    image: nginx:1.21
+    environment:
+      TZ: Asia/Tokyo
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - ${NGINX_PORT:-80}:80
+    depends_on:
+      - sparqlist
+      - sparql-proxy
+    logging: *default-logging
+
+  sparqlist:
+    build: docker/sparqlist
+    image: togodx_sparqlist:snapshot-fffa8c9
+    environment:
+      TZ: Asia/Tokyo
+      ADMIN_PASSWORD: ${SPARQLIST_ADMIN_PASSWORD:-changeme}
+      SPARQLIST_TOGODX_SPARQL: ${SPARQLIST_TOGODX_SPARQL:-http://sparql-proxy:3000/proxy/sparql}
+    volumes:
+      - ${TOGODX_SPARQLET}:/app/sparqlist/repository
+    logging: *default-logging
+
+  sparql-proxy:
+    build: docker/proxy
+    image: togodx_proxy:snapshot-snapshot-bf78805
+    environment:
+      TZ: Asia/Tokyo
+      SPARQL_BACKEND: http://virtuoso:8890/sparql
+      ADMIN_USER: admin
+      ADMIN_PASSWORD: ${SPARQL_PROXY_ADMIN_PASSWORD:-changeme}
+      CACHE_STORE: redis
+      REDIS_URL: redis://redis:6379
+      MAX_CONCURRENCY: 50
+      PASSTHROUGH: "true"
+    depends_on:
+      - virtuoso
+      - redis
+    logging: *default-logging
+
+  virtuoso:
+    image: openlink/virtuoso-opensource-7:7.2.9 
+    environment:
+      TZ: Asia/Tokyo
+      DBA_PASSWORD: dba
+      SPARQL_UPDATE: "false"
+      DEFAULT_GRAPH: http://rdf.integbio.jp
+      VIRT_Parameters_DirsAllowed: /
+      VIRT_SPARQL_MaxQueryCostEstimationTime: 10000
+      VIRT_SPARQL_MaxQueryExecutionTime: 600
+      VIRT_SPARQL_ResultSetMaxRows: 1000000
+      VIRT_URIQA_DefaultHost: togodx.dbcls.jp
+      ## Uncomment next two lines if there is 2 GB system memory free
+      #VIRT_Parameters_NumberOfBuffers: 170000
+      #VIRT_Parameters_MaxDirtyBuffers: 130000
+      ## Uncomment next two lines if there is 4 GB system memory free
+      #VIRT_Parameters_NumberOfBuffers: 340000
+      #VIRT_Parameters_MaxDirtyBuffers: 250000
+      ## Uncomment next two lines if there is 8 GB system memory free
+      #VIRT_Parameters_NumberOfBuffers: 680000
+      #VIRT_Parameters_MaxDirtyBuffers: 500000
+      ## Uncomment next two lines if there is 16 GB system memory free
+      VIRT_Parameters_NumberOfBuffers: 1360000
+      VIRT_Parameters_MaxDirtyBuffers: 1000000
+      ## Uncomment next two lines if there is 32 GB system memory free
+      #VIRT_Parameters_NumberOfBuffers: 2720000
+      #VIRT_Parameters_MaxDirtyBuffers: 2000000
+      ## Uncomment next two lines if there is 48 GB system memory free
+      #VIRT_Parameters_NumberOfBuffers: 4000000
+      #VIRT_Parameters_MaxDirtyBuffers: 3000000
+      ## Uncomment next two lines if there is 64 GB system memory free
+      #VIRT_Parameters_NumberOfBuffers: 5450000
+      #VIRT_Parameters_MaxDirtyBuffers: 4000000
+    volumes:
+      - ${VIRTUOSO_VOLUMES_DATABASE:-./virtuoso/database}:/database
+    logging: *default-logging
+
+  redis:
+    image: redis:6
+    environment:
+      TZ: Asia/Tokyo
+    logging: *default-logging
