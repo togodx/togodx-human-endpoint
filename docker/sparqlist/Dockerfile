@@ -12,6 +12,8 @@ COPY . .
 
 WORKDIR /app/sparqlist
 RUN npm -g install npm
+RUN npm audit fix
+RUN npx browserslist@latest --update-db
 RUN npm ci --production && npm run build
 RUN npm run build
 CMD npm start
