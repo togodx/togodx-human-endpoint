@@ -57,7 +57,7 @@ services:
       SPARQL_UPDATE: "false"
       DEFAULT_GRAPH: http://rdf.integbio.jp
       VIRT_Parameters_DirsAllowed: /
-      VIRT_SPARQL_MaxQueryCostEstimationTime: 10000
+      VIRT_SPARQL_MaxQueryCostEstimationTime: -1
       VIRT_SPARQL_MaxQueryExecutionTime: 600
       VIRT_SPARQL_ResultSetMaxRows: 1000000
       VIRT_URIQA_DefaultHost: togodx.dbcls.jp
