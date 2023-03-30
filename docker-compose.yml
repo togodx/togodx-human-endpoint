@@ -9,6 +9,7 @@ x-logging:
 
 services:
   nginx:
+    container_name: nginx_$NGINX_PORT
     image: nginx:1.21
     environment:
       TZ: Asia/Tokyo
@@ -22,6 +23,7 @@ services:
     logging: *default-logging
 
   sparqlist:
+    container_name: sparqlist_$NGINX_PORT
     build: docker/sparqlist
     image: togodx_sparqlist:snapshot-fffa8c9
     environment:
@@ -33,6 +35,7 @@ services:
     logging: *default-logging
 
   sparql-proxy:
+    container_name: sparql-proxy_$NGINX_PORT
     build: docker/proxy
     image: togodx_proxy:snapshot-snapshot-bf78805
     environment:
@@ -50,6 +53,7 @@ services:
     logging: *default-logging
 
   virtuoso:
+    container_name: virtuoso_$NGINX_PORT
     image: openlink/virtuoso-opensource-7:7.2.9 
     environment:
       TZ: Asia/Tokyo
@@ -87,6 +91,7 @@ services:
     logging: *default-logging
 
   redis:
+    container_name: redis_$NGINX_PORT
     image: redis:6
     environment:
       TZ: Asia/Tokyo
