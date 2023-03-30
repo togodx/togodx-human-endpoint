@@ -53,7 +53,7 @@ services:
     image: openlink/virtuoso-opensource-7:7.2.9 
     environment:
       TZ: Asia/Tokyo
-      DBA_PASSWORD: dba
+      DBA_PASSWORD: ${VIRT_DBA_PASSWORD:-dba}
       SPARQL_UPDATE: "false"
       DEFAULT_GRAPH: http://rdf.integbio.jp
       VIRT_Parameters_DirsAllowed: /
