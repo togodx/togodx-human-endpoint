@@ -24,7 +24,7 @@ docker-compose.yml for TogoDX human endpoint
 - EP(virtuoso直接): https://togodx.dbcls.jp/human/virtuoso
 
 ## インストール手順
-1. docker-compose.ymlやDockerfileなどをGitHubからcloneする
+1. docker-compose.ymlやDockerfileなどを含むこのレポジトリをGitHubからcloneする
 ```
 dbcls3284:prod-togodx-human-endpoint $ git clone https://github.com/togodx/togodx-human-endpoint
 Cloning into 'togodx-human-endpoint'...
@@ -57,7 +57,19 @@ COMPOSE_PROJECT_NAME=prod-togodx-human-endpoint-0
 # Nginx
 NGINX_PORT=1208
 ```
-4. コンテナを起動する
+4. .env/VIRTUOSO_VOLUMES_DATABASEに指定したディレクトリにvirtuoso.ini, virtuoso.dbファイルなどを配置する
+```
+mitsuhashi@togov01:~/prod-togodx-human-endpoint/togodx-human-endpoint$ grep VIRTUOSO_VOLUMES_DATABASE .env
+VIRTUOSO_VOLUMES_DATABASE=./virtuoso/togodx-2023-03-30
+mitsuhashi@togov01:~/prod-togodx-human-endpoint/togodx-human-endpoint$ ls -R virtuoso/
+virtuoso/:
+togodx-2023-03-30
+
+virtuoso/togodx-2023-03-30:
+virtuoso-temp.db  virtuoso.db  virtuoso.ini  virtuoso.lck  virtuoso.log  virtuoso.pxa  virtuoso.trx
+mitsuhashi@togov01:~/prod-togodx-human-endpoint/togodx-human-endpoint$
+```
+5. コンテナを起動する
 ```
 dbcls3284:togodx-human-endpoint $ docker-compose up -d
 dbcls3284:togodx-human-endpoint $ docker-compose ps
