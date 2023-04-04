@@ -3,21 +3,24 @@ docker-compose.yml for TogoDX human endpoint
 
 ## URL一覧
 ### 開発環境
-- SPARQList:  https://togodx-dev.dbcls.jp/human/sparqlist/
+- SPARQList: https://togodx-dev.dbcls.jp/human/sparqlist/
   - SPARQLet GitHub: https://github.com/togodx/togodx-sparqlet/tree/master/dev
-- EP(proxy経由):  https://togodx-dev.dbcls.jp/human/sparql
+- EP(proxy経由): https://togodx-dev.dbcls.jp/human/sparql
+  - SPARQLet内で{{SPARQLIST_TOGODX_SPARQL}}として参照できる。
 - EP(virtuoso直接): https://togodx-dev.dbcls.jp/human/virtuoso
 
 ### ステージング環境
-- SPARQList:  https://togodx-stg.dbcls.jp/human/sparqlist/
+- SPARQList: https://togodx-stg.dbcls.jp/human/sparqlist/
   - SPARQLet GitHub: https://github.com/togodx/togodx-sparqlet/tree/master/prod
-- EP(proxy経由):  https://togodx-stg.dbcls.jp/human/sparql
+- EP(proxy経由): https://togodx-stg.dbcls.jp/human/sparql
+  - SPARQLet内で{{SPARQLIST_TOGODX_SPARQL}}として参照できる。
 - EP(virtuoso直接): https://togodx-stg.dbcls.jp/human/virtuoso
 
 ### 本番環境
-- SPARQList:  https://togodx.dbcls.jp/human/sparqlist/ (編集不可）
+- SPARQList: https://togodx.dbcls.jp/human/sparqlist/ (編集不可）
   - SPARQLet GitHub: https://github.com/togodx/togodx-sparqlet/tree/master/prod (リリース時のcommit)
 - EP(proxy経由):  https://togodx.dbcls.jp/human/sparql
+  - SPARQLet内で{{SPARQLIST_TOGODX_SPARQL}}として参照できる。
 - EP(virtuoso直接): https://togodx.dbcls.jp/human/virtuoso
 
 ## インストール手順
