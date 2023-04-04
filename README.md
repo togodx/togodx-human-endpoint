@@ -59,7 +59,7 @@ NGINX_PORT=1208
 ```
 4. .env/VIRTUOSO_VOLUMES_DATABASEに指定したディレクトリにvirtuoso.ini, virtuoso.dbファイルなどを配置する
 ```
-mitsuhashi@togov01:~/prod-togodx-human-endpoint/togodx-human-endpoint$ grep VIRTUOSO_VOLUMES_DATABASE .env
+dbcls3284:prod-togodx-human-endpoint $ grep VIRTUOSO_VOLUMES_DATABASE .env
 VIRTUOSO_VOLUMES_DATABASE=./virtuoso/togodx-2023-03-30
 mitsuhashi@togov01:~/prod-togodx-human-endpoint/togodx-human-endpoint$ ls -R virtuoso/
 virtuoso/:
@@ -67,7 +67,7 @@ togodx-2023-03-30
 
 virtuoso/togodx-2023-03-30:
 virtuoso-temp.db  virtuoso.db  virtuoso.ini  virtuoso.lck  virtuoso.log  virtuoso.pxa  virtuoso.trx
-mitsuhashi@togov01:~/prod-togodx-human-endpoint/togodx-human-endpoint$
+dbcls3284:prod-togodx-human-endpoint $
 ```
 5. コンテナを起動する
 ```
@@ -84,6 +84,24 @@ togodx-human-endpoint-1_virtuoso_1       /virtuoso-entrypoint.sh start    Up    
 なお、コンテナを停止する場合は以下を実行する
 ```
 dbcls3284:togodx-human-endpoint $ docker-compose down
+```
+また、SPARQLetをGitHubと同期するためのCronジョブを設定する。
+```
+$ crontab -l
+# m h  dom mon dow   command
+15,45 * * * * timeout 15m /opt/services/stg-togodx-human-endpoint/togodx-sparqlet/togodx-sparqlet-sync-github
+$ cat /opt/services/stg-togodx-human-endpoint/togodx-sparqlet/togodx-sparqlet-sync-github
+#!/bin/bash
+
+SCRIPT_DIR=$(cd $(dirname $0); pwd)
+
+cd $SCRIPT_DIR
+
+git add -A .
+git commit -m 'auto commit'
+git pull --rebase
+git push
+mitsuhashi@togov01:~$
 ```
 
 ## docker-compose.ymlの.envファイル
