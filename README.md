@@ -5,6 +5,7 @@ docker-compose.yml for TogoDX human endpoint
 ### 開発環境
 - SPARQList: https://togodx-dev.dbcls.jp/human/sparqlist/
   - SPARQLet GitHub: https://github.com/togodx/togodx-sparqlet/tree/master/dev
+  - 旧SPARQLet (github.com/biosciencedbc/togosite-sparqlist) のアーカイブ： https://github.com/togodx/togosite-sparqlist-obsolete
 - EP(proxy経由): https://togodx-dev.dbcls.jp/human/sparql
   - SPARQLet内で{{SPARQLIST_TOGODX_SPARQL}}として参照できる。
 - EP(virtuoso直接): https://togodx-dev.dbcls.jp/human/virtuoso
