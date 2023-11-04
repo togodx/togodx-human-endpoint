@@ -50,7 +50,7 @@ services:
     logging: *default-logging
 
   virtuoso:
-    image: openlink/virtuoso-opensource-7:7.2.9 
+    image: openlink/virtuoso-opensource-7:7.2.11
     environment:
       TZ: Asia/Tokyo
       DBA_PASSWORD: ${VIRT_DBA_PASSWORD:-dba}
