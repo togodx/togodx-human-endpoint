@@ -123,7 +123,7 @@ SPARQLIST_TOGODX_SPARQL=https://togodx.dbcls.jp/human/sparql
 ## Default SPARQL endpoint for development
 #SPARQLIST_TOGODX_SPARQL=https://togodx-dev.dbcls.jp/human/sparql
 
-## SPARQLet for production and development
+## SPARQLet for production (togodx.dbcls.jp/human) and staging (togodx-stg.dbcls.jp/human)
 TOGODX_SPARQLET=../togodx-sparqlet/prod/
 ## SPARQLet for development
 #TOGODX_SPARQLET=../togodx-sparqlet/dev/
