@@ -20,6 +20,7 @@ services:
       - sparqlist
       - sparql-proxy
     logging: *default-logging
+    restart: always
 
   sparqlist:
     build: docker/sparqlist
@@ -31,6 +32,7 @@ services:
     volumes:
       - ${TOGODX_SPARQLET}:/app/sparqlist/repository
     logging: *default-logging
+    restart: always
 
   sparql-proxy:
     build: docker/proxy
@@ -48,6 +50,7 @@ services:
       - virtuoso
       - redis
     logging: *default-logging
+    restart: always
 
   virtuoso:
     image: openlink/virtuoso-opensource-7:7.2.11
@@ -85,9 +88,11 @@ services:
     volumes:
       - ${VIRTUOSO_VOLUMES_DATABASE:-./virtuoso/database}:/database
     logging: *default-logging
+    restart: always
 
   redis:
     image: redis:6
     environment:
       TZ: Asia/Tokyo
     logging: *default-logging
+    restart: always
