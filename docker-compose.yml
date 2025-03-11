@@ -7,7 +7,7 @@ x-logging:
 
 services:
   nginx:
-    image: nginx:1.21
+    image: nginx:1.27
     environment:
       TZ: Asia/Tokyo
     volumes:
@@ -51,7 +51,7 @@ services:
     restart: always
 
   virtuoso:
-    image: openlink/virtuoso-opensource-7:7.2.11
+    image: openlink/virtuoso-opensource-7:7.2.14
     environment:
       TZ: Asia/Tokyo
       DBA_PASSWORD: ${VIRT_DBA_PASSWORD:-dba}
