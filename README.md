@@ -116,12 +116,8 @@ NGINX_PORT=<<NGINXのポート番号>>
 # SPARQList
 SPARQLIST_ADMIN_PASSWORD=<<管理者パスワード>>
 
-## Default SPARQL endpoint for production
-SPARQLIST_TOGODX_SPARQL=https://togodx.dbcls.jp/human/sparql
-## Default SPARQL endpoint for staging
-#SPARQLIST_TOGODX_SPARQL=https://togodx-stg.dbcls.jp/human/sparql
-## Default SPARQL endpoint for development
-#SPARQLIST_TOGODX_SPARQL=https://togodx-dev.dbcls.jp/human/sparql
+## SPARQL endpoint via the internal Docker network
+SPARQLIST_TOGODX_SPARQL=http://sparql-proxy:3000/human/proxy/sparql
 
 ## SPARQLet for production (togodx.dbcls.jp/human) and staging (togodx-stg.dbcls.jp/human)
 TOGODX_SPARQLET=../togodx-sparqlet/prod/
