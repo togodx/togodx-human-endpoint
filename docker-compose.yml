@@ -5,9 +5,24 @@ x-logging:
     max-size: "1m"
     max-file: "1"
 
+networks:
+  frontend:
+  backend:
+    internal: true
+
 services:
   nginx:
-    image: nginx:1.27
+    image: nginx:1.30.6-alpine3.24
+    init: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETUID
+      - SETGID
+      - NET_BIND_SERVICE
     environment:
       TZ: Asia/Tokyo
     volumes:
@@ -17,29 +32,45 @@ services:
     depends_on:
       - sparqlist
       - sparql-proxy
+    networks:
+      - frontend
+      - backend
     logging: *default-logging
     restart: always
 
   sparqlist:
-    build: docker/sparqlist
-    image: togodx_sparqlist:snapshot-fffa8c9
+    build:
+      context: docker/sparqlist
+      network: host
+    image: togodx_sparqlist:latest
     environment:
       TZ: Asia/Tokyo
-      ADMIN_PASSWORD: ${SPARQLIST_ADMIN_PASSWORD:-changeme}
+      ROOT_PATH: /human/sparqlist/
+      REPOSITORY_PATH: /app/sparqlist/repository
+      ADMIN_PASSWORD: ${SPARQLIST_ADMIN_PASSWORD:?SPARQLIST_ADMIN_PASSWORD must be set}
       SPARQLIST_TOGODX_SPARQL: ${SPARQLIST_TOGODX_SPARQL:-http://sparql-proxy:3000/proxy/sparql}
     volumes:
       - ${TOGODX_SPARQLET}:/app/sparqlist/repository
     logging: *default-logging
     restart: always
+    init: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    networks:
+      - backend
 
   sparql-proxy:
-    build: docker/proxy
-    image: togodx_proxy:snapshot-snapshot-bf78805
+    build:
+      context: docker/proxy
+      network: host
+    image: togodx_proxy:latest
     environment:
       TZ: Asia/Tokyo
       SPARQL_BACKEND: http://virtuoso:8890/sparql
       ADMIN_USER: admin
-      ADMIN_PASSWORD: ${SPARQL_PROXY_ADMIN_PASSWORD:-changeme}
+      ADMIN_PASSWORD: ${SPARQL_PROXY_ADMIN_PASSWORD:?SPARQL_PROXY_ADMIN_PASSWORD must be set}
       CACHE_STORE: redis
       REDIS_URL: redis://redis:6379
       MAX_CONCURRENCY: 50
@@ -49,12 +80,19 @@ services:
       - redis
     logging: *default-logging
     restart: always
+    init: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    networks:
+      - backend
 
   virtuoso:
     image: openlink/virtuoso-opensource-7:7.2.14
     environment:
       TZ: Asia/Tokyo
-      DBA_PASSWORD: ${VIRT_DBA_PASSWORD:-dba}
+      DBA_PASSWORD: ${VIRT_DBA_PASSWORD:?VIRT_DBA_PASSWORD must be set}
       SPARQL_UPDATE: "false"
       DEFAULT_GRAPH: http://rdf.integbio.jp
       VIRT_Parameters_DirsAllowed: /
@@ -87,10 +125,24 @@ services:
       - ${VIRTUOSO_VOLUMES_DATABASE:-./virtuoso/database}:/database
     logging: *default-logging
     restart: always
+    init: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    networks:
+      - backend
 
   redis:
-    image: redis:6
+    image: redis:8.6.7-alpine3.23
     environment:
       TZ: Asia/Tokyo
     logging: *default-logging
     restart: always
+    init: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    networks:
+      - backend
