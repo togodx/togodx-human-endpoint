@@ -5,11 +5,6 @@ x-logging:
     max-size: "1m"
     max-file: "1"
 
-networks:
-  frontend:
-  backend:
-    internal: true
-
 services:
   nginx:
     image: nginx:1.30.6-alpine3.24
@@ -32,9 +27,6 @@ services:
     depends_on:
       - sparqlist
       - sparql-proxy
-    networks:
-      - frontend
-      - backend
     logging: *default-logging
     restart: always
 
@@ -58,9 +50,6 @@ services:
       - no-new-privileges:true
     cap_drop:
       - ALL
-    networks:
-      - backend
-
   sparql-proxy:
     build:
       context: docker/proxy
@@ -85,9 +74,6 @@ services:
       - no-new-privileges:true
     cap_drop:
       - ALL
-    networks:
-      - backend
-
   virtuoso:
     image: openlink/virtuoso-opensource-7:7.2.17
     environment:
@@ -126,9 +112,6 @@ services:
     logging: *default-logging
     restart: always
     init: true
-    networks:
-      - backend
-
   redis:
     image: redis:8.6.7-alpine3.23
     environment:
@@ -140,5 +123,3 @@ services:
       - no-new-privileges:true
     cap_drop:
       - ALL
-    networks:
-      - backend
